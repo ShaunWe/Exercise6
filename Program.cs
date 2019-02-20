@@ -17,7 +17,7 @@ namespace Exercise6
              * Exercise 6
              */
 
-            string inputLine;
+            string introduction;
         }
     }
 }
