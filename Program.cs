@@ -10,6 +10,14 @@ namespace Exercise6
     {
         static void Main(string[] args)
         {
+            /*
+             * Shaun Wehe
+             * February 19, 2019
+             * Project and Portfolio 2
+             * Exercise 6
+             */
+
+            string inputLine;
         }
     }
 }
