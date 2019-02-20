@@ -25,6 +25,7 @@ namespace Exercise6
             Dictionary<string, List<Card>> player = new Dictionary<string, List<Card>>();
             deck = BuildDeck();
             List<Card> hand;
+            Console.OutputEncoding = Encoding.Unicode;
 
             Console.WriteLine(introduction);
             Utility.KeyToProceed();
@@ -79,10 +80,10 @@ namespace Exercise6
         public static List<Card> BuildDeck()
         {
             List<Card> deck = new List<Card>();
-            char[] cardFace = new char[]{ '\uf0a1', '\uf0a2', '\uf0a3', '\uf0a4', '\uf0a5', '\uf0a6', '\uf0a7', '\uf0a8', '\uf0a9', '\uf0aa', '\uf0ab', '\uf0ad', '\uf0ae',
-            '\uf0d1', '\uf0d2', '\uf0d3', '\uf0d4', '\uf0d5', '\uf0d6', '\uf0d7', '\uf0d8', '\uf0d9', '\uf0da', '\uf0db', '\uf0dd', '\uf0de',
-            '\uf0b1', '\uf0b2', '\uf0b3', '\uf0b4', '\uf0b5', '\uf0b6', '\uf0b7', '\uf0b8', '\uf0b9', '\uf0ba', '\uf0bb', '\uf0bd', '\uf0be',
-            '\uf0c1', '\uf0c2', '\uf0c3', '\uf0c4', '\uf0c5', '\uf0c6', '\uf0c7', '\uf0c8', '\uf0c9', '\uf0ca', '\uf0cb', '\uf0cd', '\uf0ce'};
+            string[] cardFace = new string[]{ "A\u2660", "2\u2660", "3\u2660", "4\u2660", "5\u2660", "6\u2660", "7\u2660", "8\u2660", "9\u2660", "10\u2660", "J\u2660", "Q\u2660", "K\u2660",
+            "A\u2663", "2\u2663", "3\u2663", "4\u2663", "5\u2663", "6\u2663", "7\u2663", "8\u2663", "9\u2663", "10\u2663", "J\u2663", "Q\u2663", "K\u2663",
+            "A\u2665", "2\u2665", "3\u2665", "4\u2665", "5\u2665", "6\u2665", "7\u2665", "8\u2665", "9\u2665", "10\u2665", "J\u2665", "Q\u2665", "K\u2665",
+            "A\u2666", "2\u2666", "3\u2666", "4\u2666", "5\u2666", "6\u2666", "7\u2666", "8\u2666", "9\u2666", "10\u2666", "J\u2666", "Q\u2666", "K\u2666"};
             int[] value = new int[52];
             ConsoleColor[] cardColor = new ConsoleColor[52];
 
@@ -159,7 +160,7 @@ namespace Exercise6
         {
             //This method returns a hand consisting of the backs of cards with no value
             List<Card> hand = new List<Card>();
-            Card backOfCard = new Card('\uf0a0', 0, ConsoleColor.Blue);
+            Card backOfCard = new Card("XX", 0, ConsoleColor.Blue);
             for (int j = 0; j < 13; j++)
             {
                 hand.Add(backOfCard);
@@ -177,6 +178,7 @@ namespace Exercise6
                     Console.BackgroundColor = ConsoleColor.White;
                     Console.ForegroundColor = c.CardColor;
                     Console.Write($"{c.CardCode}");
+                    if (c.Value != 10) { Console.Write(" "); }
                     firstCard = false;
                 }
                 else
@@ -186,6 +188,7 @@ namespace Exercise6
                     Console.BackgroundColor = ConsoleColor.White;
                     Console.ForegroundColor = c.CardColor;
                     Console.Write($"{c.CardCode}");
+                    if (c.Value != 10) { Console.Write(" "); }
                 }
             }
             Console.BackgroundColor = ConsoleColor.Black;
@@ -198,7 +201,7 @@ namespace Exercise6
             int iterator = 1;
             foreach (KeyValuePair<string, List<Card>> kvp in players)
             {
-                Console.Write($"Player {iterator}. {kvp.Key} -- ");
+                Console.Write($"Player {iterator}. {kvp.Key}\t-- ");
                 DisplayHand(kvp.Value);
                 Console.WriteLine();
                 iterator++;

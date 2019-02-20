@@ -8,11 +8,11 @@ namespace Exercise6
 {
     class Card
     {
-        char _card;
+        string _card;
         int _value;
         ConsoleColor _cardColor;
 
-        public char CardCode
+        public string CardCode
         {
             get { return _card; }
         }
@@ -27,7 +27,7 @@ namespace Exercise6
             get { return _cardColor; }
         }
 
-        public Card (char card, int value, ConsoleColor color)
+        public Card (string card, int value, ConsoleColor color)
         {
             _card = card;
             _value = value;
