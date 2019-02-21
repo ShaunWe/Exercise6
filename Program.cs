@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Exercise6
 {
@@ -59,6 +58,7 @@ namespace Exercise6
                 //This readies the deck for use in the program
                 Queue<Card> shuffledDeck = new Queue<Card>(deck);
 
+                Console.Clear();
                 DisplayAllHands(player);
                 Utility.KeyToProceed();
                 
@@ -74,6 +74,9 @@ namespace Exercise6
                         System.Threading.Thread.Sleep(300);
                     }
                 }
+
+                Utility.KeyToProceed();
+                Console.Clear();
 
                 //This code block determines the places and displays the players and hands in that order
                 places = DeterminePlaces(player);
@@ -116,6 +119,16 @@ namespace Exercise6
                     case "y":
                     case "yes":
                         programRunning = true;
+                        //Resets values to base values and blank hands
+                        total = 0;
+                        Card backOfCard = new Card("XX", 0, ConsoleColor.Blue);
+                        foreach (KeyValuePair<string, List<Card>> kvp in player)
+                        {
+                            for (int i = 0; i < kvp.Value.Count; i++)
+                            {
+                                kvp.Value[i] = backOfCard;
+                            }
+                        }
                         break;
                     default:
                         programRunning = false;
@@ -194,6 +207,7 @@ namespace Exercise6
                 }
             }
 
+            //Adds the cards to the deck
             for (int i = 0; i < 52; i++)
             {
                 Card temp = new Card(cardFace[i], value[i], cardColor[i]);
@@ -217,6 +231,7 @@ namespace Exercise6
 
         public static void DisplayHand(List<Card> hand)
         {
+            //This method displays the hand giving background colors to the cards and also providing space in between
             bool firstCard = true;
             foreach (Card c in hand)
             {
@@ -247,7 +262,7 @@ namespace Exercise6
             //This displays all the hand of the current players
             foreach (KeyValuePair<string, List<Card>> kvp in players)
             {
-                if (kvp.Key.Length > 6)
+                if (kvp.Key.Length > 8)
                 {
                     Console.Write($"Player: {kvp.Key}\t-- ");
                 }
@@ -262,6 +277,7 @@ namespace Exercise6
 
         public static int CalculateHandValue(List<Card> hand)
         {
+            //This method calculates the value of the hand
             int handValue = 0;
 
             foreach (Card c in hand)
@@ -274,6 +290,9 @@ namespace Exercise6
 
         public static Dictionary<string, int> DeterminePlaces (Dictionary<string, List<Card>> players)
         {
+            //This method returns a dictionary with the number of places
+            //In the event of two players having the same hand value, they will have the same place as well
+            //i.e. Both will be second place
             Dictionary<string, int> places = new Dictionary<string, int>();
             List<int> handValues = new List<int>();
             string[] strPlaces = new string[] { "First", "Second", "Third", "Fourth" };
@@ -298,6 +317,7 @@ namespace Exercise6
 
         public static bool IntEqualMax(int compare)
         {
+            //This is simply a predicate method for the remove all in the DeterminePlaces method
             return (compare.Equals(max));
         }
     }
