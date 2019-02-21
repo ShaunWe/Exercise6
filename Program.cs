@@ -8,6 +8,7 @@ namespace Exercise6
 {
     class Program
     {
+        public static int max = 0;
         static void Main(string[] args)
         {
             /*
@@ -23,8 +24,10 @@ namespace Exercise6
             bool programRunning = true;
             List<Card> deck = new List<Card>();
             Dictionary<string, List<Card>> player = new Dictionary<string, List<Card>>();
+            Dictionary<string, int> places = new Dictionary<string, int>();
             deck = BuildDeck();
             List<Card> hand;
+            int total = 0;
             Console.OutputEncoding = Encoding.Unicode;
 
             Console.WriteLine(introduction);
@@ -72,8 +75,52 @@ namespace Exercise6
                     }
                 }
 
+                //This code block determines the places and displays the players and hands in that order
+                places = DeterminePlaces(player);
+                foreach (KeyValuePair<string, int> place in places)
+                {
+                    foreach (KeyValuePair<string,List<Card>> person in player)
+                    {
+                        if (place.Value == CalculateHandValue(person.Value))
+                        {
+                            Console.Write($"{place.Key} Place: {person.Key}: \t");
+                            DisplayHand(person.Value);
+                            Console.WriteLine($"\t- Score: {place.Value}\n");
+                        }
+                    }
+                }
+
+                //This code block determins the total of all hands and displays it
+                foreach (KeyValuePair<string, List<Card>> kvp in player)
+                {
+                    total += CalculateHandValue(kvp.Value);
+                }
+                Console.WriteLine($"\n\nScore Checker: {total}");
                 Utility.KeyToProceed();
-                programRunning = false;
+
+                Console.Clear();
+                Console.Write("Would you like to deal the hands again?\n(Y/N): ");
+                inputLine = Console.ReadLine().ToLower();
+                while (!(inputLine == "n" || inputLine == "y" || inputLine == "no" || inputLine == "yes"))
+                {
+                    Console.Clear();
+                    Console.Write("That is not a recognized answer.\n\nWould you like to deal the hands again?\n(Y/N): ");
+                    inputLine = Console.ReadLine().ToLower();
+                }
+                switch (inputLine)
+                {
+                    case "n":
+                    case "no":
+                        programRunning = false;
+                        break;
+                    case "y":
+                    case "yes":
+                        programRunning = true;
+                        break;
+                    default:
+                        programRunning = false;
+                        break;
+                }
             }
         }
 
@@ -198,14 +245,60 @@ namespace Exercise6
         public static void DisplayAllHands (Dictionary<string, List<Card>> players)
         {
             //This displays all the hand of the current players
-            int iterator = 1;
             foreach (KeyValuePair<string, List<Card>> kvp in players)
             {
-                Console.Write($"Player {iterator}. {kvp.Key}\t-- ");
+                if (kvp.Key.Length > 6)
+                {
+                    Console.Write($"Player: {kvp.Key}\t-- ");
+                }
+                else
+                {
+                    Console.Write($"Player: {kvp.Key}\t\t-- ");
+                }
                 DisplayHand(kvp.Value);
                 Console.WriteLine();
-                iterator++;
             }
+        }
+
+        public static int CalculateHandValue(List<Card> hand)
+        {
+            int handValue = 0;
+
+            foreach (Card c in hand)
+            {
+                handValue += c.Value;
+            }
+
+            return handValue;
+        }
+
+        public static Dictionary<string, int> DeterminePlaces (Dictionary<string, List<Card>> players)
+        {
+            Dictionary<string, int> places = new Dictionary<string, int>();
+            List<int> handValues = new List<int>();
+            string[] strPlaces = new string[] { "First", "Second", "Third", "Fourth" };
+
+            foreach (KeyValuePair<string, List<Card>> kvp in players)
+            {
+                handValues.Add(CalculateHandValue(kvp.Value));
+            }
+
+            for (int i = 0; i < strPlaces.Length; i++)
+            {
+                if (handValues.Count > 0)
+                {
+                    max = handValues.Max();
+                    places.Add(strPlaces[i], max);
+                    handValues.RemoveAll(IntEqualMax);
+                }
+            }
+
+            return places;
+        }
+
+        public static bool IntEqualMax(int compare)
+        {
+            return (compare.Equals(max));
         }
     }
 }
